@@ -1,7 +1,8 @@
 <?php require 'inc/header.php' ?>
 
+
 <div class="container">
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -33,66 +34,40 @@
   </div>
 </nav>
 
+<h1>Statistiques</h1>
 <div class="row">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">CNI</th>
-      <th scope="col">Nom</th>
-      <th scope="col">Téléphone</th>
-      <th scope="col">Type_Location</th>
-      <th scope="col">Date_Debut</th>
-      <th scope="col">Duree</th>
-      <th scope="col">Date_Fin</th>
-      <th scope="col">Immatricullation</th>
-      <th scope="col">Nom_Vehicule</th>
-      <th scope="col">Prix total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>    
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Jour 25/09/2024</h5>
+        <h3 class="card-text">1 589 336 €</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Année 2023</h5>
+        <h3 class="card-text">1 589 336 €</h3>
+      </div>
+    </div>
+  </div>
 </div>
 <br>
-    <center>
-        <button type="button" class="btn btn-success">Ajouter un clients</button>
-    </center>
-</div>
+<center>
+<div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Année 2023</h5>
+        <h3 class="card-text">1 589 336 €</h3>
+      </div>
+    </div>
+  </div>
+</center>
 
+
+
+
+
+</div>
 <?php require 'inc/footer.php' ?>

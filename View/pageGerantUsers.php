@@ -1,7 +1,7 @@
 <?php require 'inc/header.php' ?>
 
 <div class="container">
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -37,16 +37,10 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">CNI</th>
       <th scope="col">Nom</th>
       <th scope="col">Téléphone</th>
-      <th scope="col">Type_Location</th>
-      <th scope="col">Date_Debut</th>
-      <th scope="col">Duree</th>
-      <th scope="col">Date_Fin</th>
-      <th scope="col">Immatricullation</th>
-      <th scope="col">Nom_Vehicule</th>
-      <th scope="col">Prix total</th>
+      <th scope="col">Poste</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -54,45 +48,38 @@
       <th scope="row">1</th>
       <td>Mark</td>
       <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td><button type="button" class="close btn-danger" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button></td>
     </tr>
     <tr>
       <th scope="row">2</th>
       <td>Jacob</td>
       <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
+      <td><button type="button" class="close btn-danger" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button></td>
     </tr>
     <tr>
       <th scope="row">3</th>
       <td>Larry</td>
       <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
+      <td><button type="button" class="close btn-danger" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button></td>
     </tr>
   </tbody>
 </table>    
 </div>
+
 <br>
     <center>
-        <button type="button" class="btn btn-success">Ajouter un clients</button>
+        <button type="button" class="btn btn-success">Ajouter un utilisateurs</button>
     </center>
+
+
 </div>
+
+
 
 <?php require 'inc/footer.php' ?>
