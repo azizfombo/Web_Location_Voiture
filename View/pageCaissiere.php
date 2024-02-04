@@ -1,4 +1,9 @@
-<?php require 'inc/header.php' ?>
+<?php 
+require 'inc/header.php';
+require '../database.php';
+
+
+?>
 
 <div class="container">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
