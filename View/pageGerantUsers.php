@@ -16,25 +16,16 @@ try{
       array_push($postes,$res['poste']);
     }
   }
+  $connection = Database::disconnect();
 }catch (PDOException $e) {
   echo '<div class="alert alert-danger" role="alert">Erreur: ' . $e->getMessage() . '</div>';
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rz0+5P5y1z5PNSq3jpEkL+CpRBE5Q0qr4GLVzLUuIuLOq54dbM4iNA4l6NGW64dd" crossorigin="anonymous">
-    <title>Ma Page</title>
-</head>
-
-<body>
     <div class="container mt-5">
         <header>
-            <h1>Mon Site Web</h1>
+            <h1>Rent a Car</h1>
         </header>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -70,8 +61,7 @@ try{
         </nav>
 
         <section class="mt-4">
-            <h2>Présentation</h2>
-            <p>Bienvenue sur notre site web. Découvrez ce que nous avons à offrir.</p>
+            <h2>Utilisateurs</h2>
         </section>
 
         <div class="row mt-4">
