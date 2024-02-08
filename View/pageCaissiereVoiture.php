@@ -86,7 +86,7 @@ require '../database.php';
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                     <div class="card">
                       <?php
-                        echo'<img class="card-img-top" src="data:image/jpg;base64,'.$photos[$i].'" alt="Card image cap">';
+                        echo'<img class="card-img-top" src="data:image/jpeg;base64,'.base64_encode($photos[$i]).'" alt="Card image cap">';
                       ?>
                         
                         <div class="card-body">
