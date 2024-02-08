@@ -5,9 +5,9 @@ require '../database.php';
 $recetteMoisPrecedent=0;
 $recetteAnneePrecedent=0;
 $recetteJourPrecedent = 0;
-$jourPrecedent='';
-$moisPrecedent ='';
-$AnneePrecedent='';
+$jourPrecedent="";
+$moisPrecedent ="";
+$AnneePrecedent="";
 try{
     $connection = Database::connect();
     //Mois précédent
@@ -49,21 +49,17 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
     }
     //Les périodes
     $stmt = $connection->prepare("SELECT 
-    DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY) AS JourPrecedent,
-    DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) AS MoisPrecedent,
-    DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) AS AnneePrecedente
+    YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)) AS AnneePrecedente,
+    DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%M') AS MoisPrecedent,
+    DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY) AS JourPrecedent
   ");
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if($result){
-        foreach($result as $res){
-            //$AnneePrecedent = "".$res['AnneePrecedente'];
-            //$moisPrecedent = $res['MoisPrecedent'];
-            //$jourPrecedent = $res['JourPrecedent'];
-        }
+            $AnneePrecedent = $result['AnneePrecedente'];
+            $moisPrecedent = $result['MoisPrecedent'];
+            $jourPrecedent = $result['JourPrecedent'];
     }
-
-
     $connection = Database::disconnect();
   }catch (PDOException $e) {
     echo '<div class="alert alert-danger" role="alert">Erreur: ' . $e->getMessage() . '</div>';
@@ -124,7 +120,7 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
         // Données pour le diagramme circulaire
         var data = {
             <?php
-            echo "labels: ['Année 2023', 'Janvier 2024', '04/02/2024'],
+            echo "labels: ['".$AnneePrecedent."', '".$moisPrecedent."', '".$jourPrecedent."'],
             datasets: [{";
                 echo"data: [".$recetteAnneePrecedent.", ".$recetteMoisPrecedent.",".$recetteJourPrecedent."],";
                 echo"backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
@@ -149,56 +145,70 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
         <section class="mt-4">
             <h2>Recherche</h2>
         </section>
-        <div class="row">
-            <div class="col-md-6">
-                <label for="datedebut" class="form-label">Date de début</label>
-                <input type="date" id="datedebut" class="form-control"  max="<?php echo date('Y-m-d'); ?>">
-            </div>
-            <div class="col-md-6">
-                <label for="datefin" class="form-label">Date de fin</label>
-                <input type="date" id="datefin" class="form-control "  min="<?php echo date('Y-m-d'); ?>">
-            </div>
-        </div>
+            <form action="POST">
+                <div class="col-md-6">
+                    <label for="datedebut" class="form-label">Date de début</label>
+                    <input type="date" id="datedebut" class="form-control"  max="<?php echo date('Y-m-d'); ?>">
+                </div>
+                <div class="col-md-6">
+                    <label for="datefin" class="form-label">Date de fin</label>
+                    <input type="date" id="datefin" class="form-control "  max="<?php echo date('Y-m-d'); ?>">
+                </div>
+            </form>
 
 
-        <div class="container mt-5">
+
   <h1 id="nombreDynamique" class="display-4">0</h1>
-  <button onclick="demarrerAnimation()">Rechercher</button>
-</div>
+  <button onclick="submitFormAndAnimate();">Rechercher</button>
 <script>
-  // Nombre cible
-  var nombreCible = 50000;
-  
-  // Durée de l'animation en millisecondes
-  var dureeAnimation = 1000;
+  var dureeAnimation = 1000; // en millisecondes
 
-  // Fonction pour animer le comptage
-  function animerComptage() {
-    var nombreActuel = 0;
-    var increment = nombreCible / (dureeAnimation / 50); // 50 étapes par seconde
+// Fonction pour soumettre le formulaire et démarrer l'animation
+function submitFormAndAnimate() {
+var input1Value = document.getElementById("datedebut").value;
+var input2Value = document.getElementById("datefin").value;
 
-    var interval = setInterval(function() {
-      nombreActuel += increment;
-      document.getElementById('nombreDynamique').innerText = Math.round(nombreActuel);
-      if (nombreActuel >= nombreCible) {
-        clearInterval(interval);
-      }
-    }, 50); // Intervalle de 50 millisecondes entre chaque étape
-  }
+var formData = new FormData();
+formData.append('datedebut', input1Value);
+formData.append('datefin', input2Value);
 
-  // Fonction appelée lors du clic sur le bouton
-  function demarrerAnimation() {
-    // Réinitialiser le nombre affiché
-    document.getElementById('nombreDynamique').innerText = '0';
-    // Démarrer l'animation
-    animerComptage();
-  }
+var options = {
+  method: 'POST',
+  body: formData
+};
+
+fetch('rechercherStats.php', options)
+  .then(response => response.text())
+  .then(data => {
+    var nombreCible = parseInt(data);
+    
+    animerComptage(nombreCible); // Démarrer l'animation
+  })
+  .catch(error => console.error('Erreur:', error));
+
+}
+
+function animerComptage(nombreCible) {
+  var nombreActuel = 0;
+  var increment = nombreCible / (dureeAnimation / 50); // 50 étapes par seconde
+
+  var interval = setInterval(function() {
+    nombreActuel += increment;
+    if (nombreActuel >= nombreCible) {
+      nombreActuel = nombreCible;
+      clearInterval(interval); // Arrêtez l'interval une fois que le nombre cible est atteint
+    }
+    document.getElementById('nombreDynamique').innerText = Math.round(nombreActuel);
+  }, 50); 
+}
+
+
 </script>
 
 
 
 
-    </div>
+</div>
 
 
 

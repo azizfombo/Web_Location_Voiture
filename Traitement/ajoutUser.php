@@ -16,10 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':poste', $poste);
     $stmt->execute();
     if ($stmt->rowCount() > 0) {
-        header("Location: ../pageGerantUsers.php?success=true");
+        header("Location: ../View/pageGerantUsers.php?success=1");
         exit();
     } else {
-        header("Location: ../pageGerantUsers.php?message=La requête n'a pas réussi");
+        header("Location: ../View/pageGerantUsers.php?error=1");
         exit();
     }
 }
