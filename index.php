@@ -16,7 +16,7 @@ function verifierDroitsAcces($pageAutorisee) {
 
     $poste = $_SESSION['poste'];
     if(!in_array($pageAutorisee, $pagesAutorisees[$poste])) {
-        header('Location: pageGerantUsers.php');
+        header('Location: login.php');
         exit();
     }
 }

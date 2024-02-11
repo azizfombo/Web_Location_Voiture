@@ -1,6 +1,7 @@
 <?php require 'inc/header.php';?>
 
 <?php
+session_start();
 $idUser=[];
 $nomUser=[];
 $emailUser=[];
@@ -79,7 +80,7 @@ try{
                 echo'<img class="card-img-top" style="height: 250px; object-fit:cover;" src="data:image/jpeg;base64,'.base64_encode($photoUser[0]).'" alt="Card image cap">';
                 ?>
                     <div class="card-body">
-                        <p class="card-text"><?php echo $nomUser[0] ?></p>
+                        <p class="card-text"><?php echo $_SESSION['Nomuser'] ?></p>
                         <p class="card-text"><?php echo $posteUser[0] ?></p>
                     </div>
                 </div>

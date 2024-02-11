@@ -8,18 +8,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     try{
         $connection = Database::connect();
-        $stmt = $connection->prepare('select poste from user where email =:email and password=:password ');
+        $stmt = $connection->prepare('select * from user where email =:email and password=:password ');
         $stmt->bindParam(':email',$email);
         $stmt->bindParam(':password',$password);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
+          $_SESSION['iduser']=$result['iduser'];
+          $_SESSION['Nomuser']=$result['Nomuser'];
+          $_SESSION['email']=$result['email'];
+          $_SESSION['password']=$result['password'];
           $_SESSION['poste']=$result['poste'];
+          $_SESSION['telephone']=$result['telephone'];
+          $_SESSION['photo']=$result['photo'];
           if($result['poste'] == 'CAISSE'){
             header("Location: pageCaissiere.php");
           }else if($result['poste'] == 'GERANT'){
-            header("Location: pageGerantUsers.php");
+            header("Location: pageUsers.php");
           }
       } else {
         echo '<div class="alert alert-danger" role="alert">Identifiants incorrects. Veuillez réessayer.</div>';
