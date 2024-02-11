@@ -81,36 +81,29 @@ try{
                 ?>
                     <div class="card-body">
                         <p class="card-text"><?php echo $_SESSION['Nomuser'] ?></p>
-                        <p class="card-text"><?php echo $posteUser[0] ?></p>
+                        <p class="card-text"><?php echo $_SESSION['poste'] ?></p>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <form>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">NOM</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="<?php $nomUser[0] ?>">
-                        
+                        <label for="nom">NOM</label>
+                        <input type="text" class="form-control" id="nom"  placeholder="Enter Name" value="<?php echo $_SESSION['Nomuser'] ?>">    
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Adresse Mail</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <label for="email">Adresse Mail</label>
+                        <input type="email" class="form-control" id="email"  placeholder="Enter email" value="<?php echo $_SESSION['email'] ?>">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Mot de Passe</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <label for="password">Mot de Passe</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter email" value="<?php echo $_SESSION['password'] ?>">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Telephone</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <label for="telephone">Telephone</label>
+                        <input type="tel" class="form-control" id="telephone" placeholder="Enter email" value="<?php echo $_SESSION['telephone'] ?>">
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Poste</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
+                    <br>
                     <button type="submit" class="btn btn-primary">Modifier</button>
                 </form>
             </div>
