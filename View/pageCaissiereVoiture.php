@@ -67,17 +67,17 @@ require '../database.php';
 </nav>
 <body>
 <div class="container">
-<div class="row d-flex justify-content-between">
-    <div class="col-auto">
-        <h1>Liste des voitures</h1>
-    </div>
-    <div class="col-auto">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
-</div>
+      <div class="row d-flex justify-content-between">
+          <div class="col-auto">
+              <h1>Liste des voitures</h1>
+          </div>
+          <div class="col-auto">
+              <form class="form-inline">
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+          </div>
+      </div>
         <div class="row">
             <?php
             // Boucle pour afficher les cartes
@@ -86,7 +86,7 @@ require '../database.php';
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                     <div class="card">
                       <?php
-                        echo'<img class="card-img-top" src="data:image/jpeg;base64,'.base64_encode($photos[$i]).'" alt="Card image cap">';
+                        echo'<img class="card-img-top" style="height: 250px; object-fit:cover;" src="data:image/jpeg;base64,'.base64_encode($photos[$i]).'" alt="Card image cap">';
                       ?>
                         
                         <div class="card-body">
