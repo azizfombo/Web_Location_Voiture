@@ -51,10 +51,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
         </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
