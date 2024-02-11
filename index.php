@@ -10,7 +10,7 @@ function verifierDroitsAcces($pageAutorisee) {
     }
 
     $pagesAutorisees = [
-        'GERANT' => ['pageGerantStats.php', 'pageGerantUsers.php', 'pageUsers.php'],
+        'GERANT' => ['pageGerantStats.php', 'pageGerantUsers.php', 'pageUsers.php','pageCaissiereVoiture.php'],
         'CAISSE' => ['pageCaissiereVoiture.php', 'pageUsers.php']
     ];
 

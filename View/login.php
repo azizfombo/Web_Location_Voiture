@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           $_SESSION['telephone']=$result['telephone'];
           $_SESSION['photo']=$result['photo'];
           if($result['poste'] == 'CAISSE'){
-            header("Location: pageCaissiere.php");
+            header("Location: pageUsers.php");
           }else if($result['poste'] == 'GERANT'){
             header("Location: pageUsers.php");
           }
