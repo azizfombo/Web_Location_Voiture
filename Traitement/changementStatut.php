@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $connection = Database::connect();
 
-            $stmt = $connection->prepare('UPDATE FROM user WHERE iduser = :id AND poste=:poste');
+            $stmt = $connection->prepare('UPDATE user SET poste=:poste WHERE iduser = :id');
             $stmt->bindParam(':id', $index);
             $stmt->bindParam(':poste', $poste);
             $stmt->execute();

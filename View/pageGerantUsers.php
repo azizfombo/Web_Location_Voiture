@@ -1,6 +1,9 @@
 <?php 
 require 'inc/header.php';
 require '../database.php';
+require_once '../index.php';
+verifierDroitsAcces('pageGerantUsers');
+
 $postes = [];
 $noms = [];
 $telephones = [];
@@ -12,7 +15,7 @@ try{
   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
   if($result){
     foreach($result as $res){
-    array_push($id,$res['iduser']);
+      array_push($id,$res['iduser']);
       array_push($noms,$res['nomuser']);
       array_push($telephones,$res['telephone']);
       array_push($postes,$res['poste']);
@@ -203,29 +206,38 @@ try{
             echo '<div class="alert alert-danger" role="alert">Une erreur s\'est produite lors de l\'ajout de l\'utilisateur.</div>';
         }
         ?>
-        <form action="../Traitement/ajoutUser.php" method="POST">
-          <div class="mb-3">
-            <label for="nom" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="nom" name="nom" required>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-          </div>
-          <div class="mb-3">
-            <label for="telephone" class="form-label">Téléphone</label>
-            <input type="tel" class="form-control" id="telephone" name="telephone" required>
-          </div>
-          <div class="mb-3">
-            <label for="poste" class="form-label">Poste</label>
-            <input type="text" list="poste" id="poste" name="poste"/>
-            <datalist id="poste">
-              <option>GERANT</option>
-              <option>CAISSE</option>
-            </datalist>
-          </div>
-          <button type="submit" class="btn btn-primary">Ajouter</button>
-        </form>
+        <form action="../Traitement/ajoutUser.php" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="nom" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="nom" name="nom" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="mb-3">
+        <label for="telephone" class="form-label">Téléphone</label>
+        <input type="tel" class="form-control" id="telephone" name="telephone" required>
+    </div>
+    <div class="mb-3">
+    <label for="poste" class="form-label">Poste</label>
+    <select id="poste" name="poste" class="form-select">
+        <option value="CAISSE">CAISSE</option>
+        <option value="GERANT">GERANT</option>
+    </select>
+</div>
+
+    <div class="mb-3">
+        <label for="photo" class="form-label">Photo</label>
+        <input type="file" class="form-control" id="photo" name="photo" accept="image/jpeg, image/png, image/gif" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+</form>
+
       </div>
     </div>
   </div>

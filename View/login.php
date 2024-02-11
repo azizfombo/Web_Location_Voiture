@@ -1,6 +1,7 @@
 <?php
 require 'inc/header.php';
 require '../database.php';
+session_start();
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -14,6 +15,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
+          $_SESSION['poste']=$result['poste'];
           if($result['poste'] == 'CAISSE'){
             header("Location: pageCaissiere.php");
           }else if($result['poste'] == 'GERANT'){

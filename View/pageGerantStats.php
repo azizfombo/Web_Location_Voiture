@@ -1,6 +1,11 @@
 <?php 
-require 'inc/header.php';
-require '../database.php';
+require_once 'inc/header.php';
+require_once '../database.php';
+require_once '../index.php';
+verifierDroitsAcces('pageGerantStats');
+
+$mois = [];
+$recette = [];
 
 $recetteMoisPrecedent=0;
 $recetteAnneePrecedent=0;
@@ -10,55 +15,27 @@ $moisPrecedent ="";
 $AnneePrecedent="";
 try{
     $connection = Database::connect();
-    //Mois précédent
-    $stmt = $connection->prepare("SELECT SUM(recette) AS sommeRecette
-FROM stats
-WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
-  AND dateRecette < DATE_FORMAT(NOW(), '%Y-%m-01')
-");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($result){
-      $recetteMoisPrecedent = $result['sommeRecette'];
-    }
-
-    //Année Précédente
-    $stmt = $connection->prepare("SELECT SUM(recette) AS sommeRecette
-    FROM stats
-    WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 YEAR, '%Y-01-01')
-      AND dateRecette < DATE_FORMAT(NOW(), '%Y-01-01')    
-");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($result){
-        $recetteAnneePrecedent = $result['sommeRecette'];
-    }
-    //Jour Précédent
-    $stmt = $connection->prepare("SELECT SUM(recette) AS sommeRecette
-    FROM stats
-    WHERE dateRecette = CURDATE() - INTERVAL 1 DAY");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($result){
-        $recetteJourPrecedent = $result['sommeRecette'];
-    }
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($result){
-        $recetteAnneePrecedent = $result['sommeRecette'];
-    }
-    //Les périodes
     $stmt = $connection->prepare("SELECT 
-    YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)) AS AnneePrecedente,
-    DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%M') AS MoisPrecedent,
-    DATE_SUB(CURRENT_DATE, INTERVAL 1 DAY) AS JourPrecedent
-  ");
+    MONTHNAME(dateRecette) AS Mois,
+    SUM(recette) AS Recette
+FROM 
+    stats
+WHERE 
+    dateRecette >= DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
+    AND dateRecette <= CURDATE()
+GROUP BY 
+    YEAR(dateRecette), MONTH(dateRecette)
+ORDER BY 
+    YEAR(dateRecette) ASC, MONTH(dateRecette) ASC;
+
+");
     $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if($result){
-            $AnneePrecedent = $result['AnneePrecedente'];
-            $moisPrecedent = $result['MoisPrecedent'];
-            $jourPrecedent = $result['JourPrecedent'];
+        foreach($result as $res){
+            array_push($mois,$res['Mois']);
+            array_push($recette,$res['Recette']);
+        }
     }
     $connection = Database::disconnect();
   }catch (PDOException $e) {
@@ -106,6 +83,7 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
 
         <section class="mt-4">
             <h2>Statistiques (en Euros €)</h2>
+
         </section>
         <div class="row justify-content-center">
         <div class="col-md-6">
@@ -118,15 +96,31 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Données pour le diagramme circulaire
-        var data = {
-            <?php
-            echo "labels: ['".$AnneePrecedent."', '".$moisPrecedent."', '".$jourPrecedent."'],
-            datasets: [{";
-                echo"data: [".$recetteAnneePrecedent.", ".$recetteMoisPrecedent.",".$recetteJourPrecedent."],";
-                echo"backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-            }]";
-            ?>
-        };
+        <?php
+$labels = [];
+$data = [];
+$background = [];
+$tabBackground = ['#FF6384', '#36A2EB', '#FFCE56', '#32CD32', '#8A2BE2'];
+
+for ($i = 0; $i < count($mois); $i++) {
+    array_push($labels, $mois[$i]);
+    array_push($data, $recette[$i]);
+    array_push($background, $tabBackground[$i]);
+}
+
+$chartData = [
+    'labels' => $labels,
+    'datasets' => [
+        [
+            'data' => $data,
+            'backgroundColor' => $background
+        ]
+    ]
+];
+?>
+
+var data = <?php echo json_encode($chartData); ?>;
+
 
         var options = {
             responsive: true,
@@ -142,19 +136,26 @@ WHERE dateRecette >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
 </script>
 
 
-        <section class="mt-4">
-            <h2>Recherche</h2>
-        </section>
-            <form action="POST">
-                <div class="col-md-6">
+<section class="mt-4">
+    <h2>Recherche</h2>
+</section>
+<form action="POST">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col">
                     <label for="datedebut" class="form-label">Date de début</label>
-                    <input type="date" id="datedebut" class="form-control"  max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" id="datedebut" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <label for="datefin" class="form-label">Date de fin</label>
-                    <input type="date" id="datefin" class="form-control "  max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" id="datefin" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                 </div>
-            </form>
+            </div>
+        </div>
+    </div>
+</form>
+
 
 
 
@@ -181,8 +182,12 @@ fetch('rechercherStats.php', options)
   .then(response => response.text())
   .then(data => {
     var nombreCible = parseInt(data);
-    
-    animerComptage(nombreCible); // Démarrer l'animation
+    if (!isNaN(nombreCible)) {
+        animerComptage(nombreCible); 
+    } else {
+        animerComptage(0);
+    }
+
   })
   .catch(error => console.error('Erreur:', error));
 
