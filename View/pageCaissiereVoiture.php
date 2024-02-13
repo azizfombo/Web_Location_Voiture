@@ -68,7 +68,14 @@ require '../database.php';
                       ?>
                         
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $marque[$i] . '  (' . $immat[$i] . ')'; ?></h5>
+                            <div class="row">
+                                <div class="col">
+                                <h5 class="card-title"><?php echo $marque[$i] . '  (' . $immat[$i] . ')'; ?></h5>
+                                </div>
+                                <div class="col-3">
+                                <h6 class="card-title"><?php echo $prixlocation[$i].'€/J'; ?></h6>
+                                </div>
+                            </div>
                             <p class="card-text"><?php echo $info[$i] ?></p>
                             <div class="row">
                                 <div class="col-4 mb-2 text-center">
@@ -93,9 +100,62 @@ require '../database.php';
         ?>
       </div>
       <br>
-      <div class="col-1 mb-2 text-center ">
-        <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center">Ajouter</a>
+      <div class="col-2 mb-2 text-center ">
+        <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#ajouterVehiculeModal">Ajouter un Véhicule</a>
       </div> 
+      <div class="modal fade" id="ajouterVehiculeModal" tabindex="-1" aria-labelledby="ajouterVehiculeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ajouterVehiculeModalLabel">Ajouter un vehicule</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php
+        if (isset($_GET['success'])) {
+            echo '<div class="alert alert-success" role="alert">Véhicule ajouté avec succès!</div>';
+        } elseif (isset($_GET['error'])) {
+            echo '<div class="alert alert-danger" role="alert">Une erreur s\'est produite lors de l\'ajout de l\'utilisateur.</div>';
+        }
+        ?>
+        <form action="../Traitement/ajouterVehicule.php" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="marque" class="form-label">Nom De La Marque</label>
+        <input type="text" class="form-control" id="marque" name="marque" required>
+    </div>
+    <div class="mb-3">
+        <label for="immat" class="form-label">Entrer l'Immatriculation</label>
+        <input type="text" class="form-control" id="immat" name="immat" required>
+    </div>
+    <div class="mb-3">
+        <label for="info" class="form-label">Détails</label>
+        <input type="text" class="form-control" id="info" name="info" required>
+    </div>
+    <div class="mb-3">
+        <label for="prixlocation" class="form-label">Prix de location à la journée</label>
+        <input type="text" class="form-control" id="prixlocation" name="prixlocation" required>
+    </div>
+    <div class="mb-3">
+    <label for="dispo" class="form-label">Disponibilité</label>
+    <select id="dispo" name="dispo" class="form-select">
+        <option value="CAISSE">OUI</option>
+        <option value="GERANT">NON</option>
+    </select>
+</div>
+
+    <div class="mb-3">
+        <label for="photos" class="form-label">Photos</label>
+        <input type="file" class="form-control" id="photos" name="photos" accept="image/jpeg, image/png, image/gif" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
 </body>
 
 <?php require 'inc/footer.php'; ?>
