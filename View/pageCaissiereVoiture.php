@@ -91,6 +91,10 @@ require '../database.php';
             <?php
         }
         ?>
+      </div>
+      <br>
+      <div class="col-1 mb-2 text-center ">
+        <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center">Ajouter</a>
       </div> 
 </body>
 
