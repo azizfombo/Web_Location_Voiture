@@ -93,7 +93,115 @@ if ($_SESSION['poste'] == 'CAISSE') {
             <?php
         }
         ?>
-      </div> 
+        </div>
+        <!-- Bouton "Panier" -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#panierModal">
+            Panier
+        </button>
+
+        <!-- Modal pour les informations du panier -->
+        <div class="modal fade" id="panierModal" tabindex="-1" role="dialog" aria-labelledby="panierModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="panierModalLabel">Informations du panier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulaire pour les informations du client -->
+                        <form id="panierForm">
+                            <div class="form-group">
+                                <label for="cni">CNI</label>
+                                <input type="text" class="form-control" id="cni" name="cni">
+                            </div>
+                            <div class="form-group">
+                                <label for="nomclient">Nom du client</label>
+                                <input type="text" class="form-control" id="nomclient" name="nomclient">
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone">Téléphone</label>
+                                <input type="text" class="form-control" id="telephone" name="telephone">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_debut">Date de début</label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_fin">Duree</label>
+                                <input type="number" class="form-control" id="duree" name="duree">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <!-- Bouton pour insérer les données du panier dans la base de données -->
+                        <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var panier = [];
+        var prix = [];
+        function addToCart(immat) {
+            panier.push(immat);
+        }
+        function addPrice(price){
+          prix.push(price);
+        }
+
+        <?php for ($i = 0; $i < count($immat); $i++) : ?>
+            document.getElementById('sell_<?php echo $immat[$i]; ?>').addEventListener('click', function() {
+                addToCart('<?php echo $immat[$i]; ?>');
+                addPrice('<?php echo $prixlocation[$i]; ?>')
+                // Modifier le texte du bouton pour "Sold Out"
+                this.innerText = "Sold Out";
+                // Désactiver le bouton
+                this.classList.add("disabled");
+                // Empêcher les clics ultérieurs
+                this.removeEventListener('click');
+                console.log(panier[1]);
+            });
+        <?php endfor; ?>
+
+
+        function payer() {
+            var cni = document.getElementById("cni").value;
+            var nomclient = document.getElementById("nomclient").value;
+            var telephone = document.getElementById("telephone").value;
+            var date_debut = document.getElementById("date_debut").value;
+            var duree = document.getElementById("duree").value;
+
+            var data = new URLSearchParams();
+            data.append('cni', cni);
+            data.append('nomclient', nomclient);
+            data.append('telephone', telephone);
+            data.append('date_debut', date_debut);
+            data.append('duree', duree);
+            data.append('panier', panier);
+            data.append('prix',prix);
+
+            fetch('../Traitement/insererClient.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: data
+                })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    // Fermer la modal après l'insertion
+                    $('#panierModal').modal('hide');
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la requête:', error);
+                });
+        }
+    </script>
 </body>
 
 <?php require 'inc/footer.php'; ?>
