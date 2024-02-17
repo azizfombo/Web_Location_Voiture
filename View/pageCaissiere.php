@@ -1,5 +1,4 @@
 <?php 
-session_start();
 require_once '../index.php';
 verifierDroitsAcces('pageCaissiereVoiture.php');
 require 'inc/header.php';
