@@ -1,6 +1,5 @@
-<?php require 'inc/header.php'; ?>
-
 <?php
+require 'inc/header.php';
 require_once '../index.php';
 verifierDroitsAcces('pageCaissiereVoiture.php');
 $immat=[];
@@ -44,7 +43,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
 }
 ?>
 
-<body>
     <div class="container">
         <div class="row d-flex justify-content-between">
             <div class="col-auto">
@@ -58,7 +56,10 @@ if ($_SESSION['poste'] == 'CAISSE') {
             </div>
         </div>
         <div class="row">
+        <?php if ($_SESSION['poste'] == 'GERANT') : ?>
             <?php
+
+            ///////  GERANT
             // Boucle pour afficher les cartes
             for ($i = 0; $i < count($immat); $i++) {
                 ?>
@@ -81,9 +82,9 @@ if ($_SESSION['poste'] == 'CAISSE') {
                             <div class="row">
                                 <div class="col-4 mb-2 text-center">
                                     <?php if ($dispo[$i] == 'OUI') : ?>
-                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-secondary disabled d-flex align-items-center justify-content-center">Sold Out</a>
-                                    <?php else : ?>
                                         <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Sell</a>
+                                    <?php else : ?>
+                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-secondary disabled d-flex align-items-center justify-content-center">Sold Out</a>
                                     <?php endif; ?>
                                 </div>
                                 <div class="col-4 mb-2 text-center">
@@ -100,11 +101,58 @@ if ($_SESSION['poste'] == 'CAISSE') {
             <?php
         }
         ?>
+        <?php endif; ?>
+        <?php if ($_SESSION['poste'] == 'CAISSE') : ?>
+            <?php
+
+            ///////  CAISSE
+            // Boucle pour afficher les cartes
+            for ($i = 0; $i < count($immat); $i++) {
+                ?>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                    <div class="card">
+                        <?php
+                            echo '<img class="card-img-top" style="height: 250px; object-fit:cover;" src="data:image/jpeg;base64,' . base64_encode($photos[$i]) . '" alt="Card image cap">';
+                            ?>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                <h5 class="card-title"><?php echo $marque[$i] . '  (' . $immat[$i] . ')'; ?></h5>
+                                </div>
+                                <div class="col-3">
+                                <h6 class="card-title"><?php echo $prixlocation[$i].'€/J'; ?></h6>
+                                </div>
+                            </div>
+                            <p class="card-text"><?php echo $info[$i] ?></p>
+                            <div class="row">
+                                <div class="col-12 mb-2 text-center">
+                                    <?php if ($dispo[$i] == 'OUI') : ?>
+                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Sell</a>
+                                    <?php else : ?>
+                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-secondary disabled d-flex align-items-center justify-content-center">Sold Out</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <?php
+        }
+        ?>
+
+        <?php endif; ?>
+
+
+
       </div>
       <br>
+    <?php if ($_SESSION['poste'] == 'GERANT') : ?>
       <div class="col-2 mb-2 text-center ">
         <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#ajouterVehiculeModal">Ajouter un Véhicule</a>
       </div> 
+      <?php endif; ?>
       <div class="modal fade" id="ajouterVehiculeModal" tabindex="-1" aria-labelledby="ajouterVehiculeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -176,7 +224,23 @@ if ($_SESSION['poste'] == 'CAISSE') {
                     </div>
                     <div class="modal-body">
                         <!-- Formulaire pour les informations du client -->
-                        <form id="panierForm">
+                        <form id="panierForm1">
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <form id="panierForm">
                             <div class="form-group">
                                 <label for="cni">CNI</label>
                                 <input type="text" class="form-control" id="cni" name="cni">
@@ -197,76 +261,81 @@ if ($_SESSION['poste'] == 'CAISSE') {
                                 <label for="date_fin">Duree</label>
                                 <input type="number" class="form-control" id="duree" name="duree">
                             </div>
+                            <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <!-- Bouton pour insérer les données du panier dans la base de données -->
-                        <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        var panier = [];
-        var prix = [];
-        function addToCart(immat) {
-            panier.push(immat);
-        }
-        function addPrice(price){
-          prix.push(price);
-        }
-
-        <?php for ($i = 0; $i < count($immat); $i++) : ?>
-            document.getElementById('sell_<?php echo $immat[$i]; ?>').addEventListener('click', function() {
-                addToCart('<?php echo $immat[$i]; ?>');
-                addPrice('<?php echo $prixlocation[$i]; ?>')
-                // Modifier le texte du bouton pour "Sold Out"
-                this.innerText = "Sold Out";
-                // Désactiver le bouton
-                this.classList.add("disabled");
-                // Empêcher les clics ultérieurs
-                this.removeEventListener('click');
-                console.log(panier[1]);
-            });
-        <?php endfor; ?>
 
 
-        function payer() {
-            var cni = document.getElementById("cni").value;
-            var nomclient = document.getElementById("nomclient").value;
-            var telephone = document.getElementById("telephone").value;
-            var date_debut = document.getElementById("date_debut").value;
-            var duree = document.getElementById("duree").value;
+    <!-- Assurez-vous d'inclure jQuery avant votre script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-            var data = new URLSearchParams();
-            data.append('cni', cni);
-            data.append('nomclient', nomclient);
-            data.append('telephone', telephone);
-            data.append('date_debut', date_debut);
-            data.append('duree', duree);
-            data.append('panier', panier);
-            data.append('prix',prix);
+<script>
+    var panier = [];
+    var prix = [];
+    function addToCart(immat) {
+        panier.push(immat);
+    }
+    function addPrice(price){
+      prix.push(price);
+    }
 
-            fetch('../Traitement/insererClient.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: data
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log(data);
-                    // Fermer la modal après l'insertion
-                    $('#panierModal').modal('hide');
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la requête:', error);
-                });
-        }
-    </script>
-</body>
+    <?php for ($i = 0; $i < count($immat); $i++) : ?>
+        document.getElementById('sell_<?php echo $immat[$i]; ?>').addEventListener('click', function() {
+            addToCart('<?php echo $immat[$i]; ?>');
+            addPrice('<?php echo $prixlocation[$i]; ?>')
+            // Modifier le texte du bouton pour "Sold Out"
+            this.innerText = "Sold Out";
+            // Désactiver le bouton
+            this.classList.add("disabled");
+            // Empêcher les clics ultérieurs
+            //this.removeEventListener('click');
+            console.log(panier[1]);
+        });
+    <?php endfor; ?>
+
+
+    function payer() {
+    var cni = document.getElementById("cni").value;
+    var nomclient = document.getElementById("nomclient").value;
+    var telephone = document.getElementById("telephone").value;
+    var date_debut = document.getElementById("date_debut").value;
+    var duree = document.getElementById("duree").value;
+
+    // Vérifier si panier et prix sont définis et non vides
+    if (panier && prix && panier.length > 0 && prix.length > 0) {
+        var data = new URLSearchParams();
+        data.append('cni', cni);
+        data.append('nomclient', nomclient);
+        data.append('telephone', telephone);
+        data.append('date_debut', date_debut);
+        data.append('duree', duree);
+        data.append('panier', JSON.stringify(panier)); // Convertir le tableau en chaîne JSON
+        data.append('prix', JSON.stringify(prix)); // Convertir le tableau en chaîne JSON
+
+        fetch('../Traitement/insererClient.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            // Fermer la modal après l'insertion
+            $('#panierModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête:', error);
+        });
+    } else {
+        console.error('Panier ou prix non défini ou vide.');
+    }
+}
+
+
+
+</script>
 
 <?php require 'inc/footer.php'; ?>
