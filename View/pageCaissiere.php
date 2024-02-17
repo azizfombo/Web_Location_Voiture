@@ -1,42 +1,49 @@
 <?php 
+session_start();
+require_once '../index.php';
+verifierDroitsAcces('pageCaissiereVoiture.php');
 require 'inc/header.php';
 require '../database.php';
 
+$cniclient=[];
+$nomclient=[];
+$telclient=[];
+$typelocation=[];
+$datedebut=[];
+$duree = [];
+$datefin = [];
 
+try {
+    $conn = Database::connect();
+    $stmt = $conn->prepare("SELECT * FROM clients");
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($res) {
+        foreach ($res as $resultat) {
+            array_push($cniclient, $resultat['cniclient']);
+            array_push($nomclient, $resultat['nomclient']);
+            array_push($telclient, $resultat['telclient']);
+            array_push($typelocation, $resultat['typelocation']);
+            array_push($datedebut, $resultat['datedebut']);
+            array_push($duree, $resultat['duree']);
+            array_push($datefin, $resultat['datefin']);
+        }
+    }
+
+    $connection = Database::disconnect();
+} catch (PDOException $e) {
+    echo '<div class="alert alert-danger" role="alert">Erreur: ' . $e->getMessage() . '</div>';
+}
 ?>
 
 <div class="container">
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<?php
+if ($_SESSION['poste'] == 'CAISSE') {
+    require_once 'inc/navbarCaisse.php';
+} else if ($_SESSION['poste'] == 'GERANT') {
+    require_once 'inc/navbarGerant.php';
+}
+?>
 
 <div class="row">
 <table class="table">
@@ -45,59 +52,41 @@ require '../database.php';
       <th scope="col">CNI</th>
       <th scope="col">Nom</th>
       <th scope="col">Téléphone</th>
+      <th scope="col">E-mail</th>
       <th scope="col">Type_Location</th>
       <th scope="col">Date_Debut</th>
       <th scope="col">Duree</th>
       <th scope="col">Date_Fin</th>
-      <th scope="col">Immatricullation</th>
-      <th scope="col">Nom_Vehicule</th>
-      <th scope="col">Prix total</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
+  
   <tbody>
+  <?php
+    for ($i = 0; $i < count($cniclient); $i++) {
+  ?>
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <th scope="row"><?php echo $cniclient[$i] ?></th>
+      <td><?php echo $nomclient[$i] ?></td>
+      <td><?php echo $telclient[$i] ?></td>
+      <td>emmanuel@3il.fr</td>
+      <td><?php echo $typelocation[$i] ?></td>
+      <td><?php echo $datedebut[$i] ?></td>
+      <td><?php echo $duree[$i] ?></td>
+      <td><?php echo $datefin[$i] ?></td>
+      <td>
+      <button type="button" class=" btn btn-danger" aria-label="Close" onclick="confirmDelete('.$cniclient[$i].')">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      </td>
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    <?php
+    }
+    ?>
   </tbody>
 </table>    
 </div>
-<br>
-    <center>
-        <button type="button" class="btn btn-success">Ajouter un clients</button>
-    </center>
+
 </div>
 
 <?php require 'inc/footer.php' ?>

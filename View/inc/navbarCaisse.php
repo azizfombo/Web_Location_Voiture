@@ -13,7 +13,7 @@
         <a class="nav-link" href="../View/pageCaissiereVoiture.php">Vehicules</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../View/">Disabled</a>
+        <a class="nav-link" href="../View/pageCaissiere.php">Clients</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0" action="../Traitement/logout.php" method="post">
