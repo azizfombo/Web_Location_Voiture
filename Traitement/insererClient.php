@@ -88,22 +88,21 @@ try {
     $content .= '<p>Date de début : ' . $date_debut . '</p>';
     $content .= '<p>Durée : ' . $duree . ' jours</p>';
     $content .= '<p><strong>Éléments du panier :</strong></p>';
-    foreach ($panier as $immat) {
-        $content .= '<p>Voiture : ' . $immat . '</p>';
+    for($i=0;$i<count($panier);$i++) {
+        $content .= '<p>Voiture : ' . $panier[$i] . '   -   '.$prix[$i].' €</p>';
     }
 
     $pdf->writeHTML($content, true, false, true, false, '');
 
     $file_name = 'facture_location_' . date('YmdHis') . '.pdf';
-    // Chemin complet vers le répertoire pdf
+
     $pdf_dir = __DIR__ . '/../pdf/';
 
-    // Vérifier si le répertoire pdf existe, sinon le créer
+
     if (!is_dir($pdf_dir)) {
         mkdir($pdf_dir, 0755, true);
     }
 
-    // Chemin complet vers le fichier PDF
     $file_path = $pdf_dir . $file_name;
 
     // Sauvegarder le document PDF sur le serveur
