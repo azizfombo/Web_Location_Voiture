@@ -4,29 +4,35 @@ require '../database.php';
 session_start();
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 
     try{
         $connection = Database::connect();
-        $stmt = $connection->prepare('select * from user where email =:email and password=:password ');
+        $stmt = $connection->prepare('SELECT * FROM user WHERE email = :email');
         $stmt->bindParam(':email',$email);
-        $stmt->bindParam(':password',$password);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-          $_SESSION['iduser']=$result['iduser'];
-          $_SESSION['Nomuser']=$result['Nomuser'];
-          $_SESSION['email']=$result['email'];
-          $_SESSION['password']=$result['password'];
-          $_SESSION['poste']=$result['poste'];
-          $_SESSION['telephone']=$result['telephone'];
-          $_SESSION['photo']=$result['photo'];
-          if($result['poste'] == 'CAISSE'){
-            header("Location: pageUsers.php");
-          }else if($result['poste'] == 'GERANT'){
-            header("Location: pageUsers.php");
-          }
+          echo $result['password'];
+          if (password_verify($password, $result['password'])) {
+              $_SESSION['iduser']=$result['iduser'];
+              $_SESSION['Nomuser']=$result['Nomuser'];
+              $_SESSION['email']=$result['email'];
+              $_SESSION['password']=$result['password'];
+              $_SESSION['poste']=$result['poste'];
+              $_SESSION['telephone']=$result['telephone'];
+              $_SESSION['photo']=$result['photo'];
+              if($result['poste'] == 'CAISSE'){
+                header("Location: pageUsers.php");
+                exit();
+              }else if($result['poste'] == 'GERANT'){
+                header("Location: pageUsers.php");
+                exit();
+              }
+          }else {
+            echo '<div class="alert alert-danger" role="alert">Mot de passe incorrect. Veuillez réessayer.</div>';
+        }
       } else {
         echo '<div class="alert alert-danger" role="alert">Identifiants incorrects. Veuillez réessayer.</div>';
       }
