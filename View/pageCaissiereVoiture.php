@@ -268,7 +268,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
                         </form>
 
 
-    <!-- Assurez-vous d'inclure jQuery avant votre script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
@@ -285,18 +284,46 @@ if ($_SESSION['poste'] == 'CAISSE') {
 
     <?php for ($i = 0; $i < count($immat); $i++) : ?>
         document.getElementById('sell_<?php echo $immat[$i]; ?>').addEventListener('click', function() {
+
             addToCart('<?php echo $immat[$i]; ?>');
             addPrice('<?php echo $prixlocation[$i]; ?>')
-            // Modifier le texte du bouton pour "Sold Out"
             this.innerText = "Sold Out";
-            // Désactiver le bouton
             this.classList.add("disabled");
-            // Empêcher les clics ultérieurs
-            //this.removeEventListener('click');
+            updatePanier(); 
             console.log(panier[1]);
         });
     <?php endfor; ?>
 
+function updatePanier() {
+    var listeElements = document.getElementById("listePanier");
+    listeElements.innerHTML = ""; 
+
+    for (var i = 0; i < panier.length; i++) {
+        var nouvelElementLi = document.createElement("li");
+        nouvelElementLi.textContent = panier[i] + "    -     " + prix[i] + " €";
+        var boutonSupprimer = document.createElement("button");
+        boutonSupprimer.textContent = "Supprimer";
+        boutonSupprimer.setAttribute("data-index", i);
+
+        boutonSupprimer.addEventListener("click", function (event) {
+            var index = event.target.getAttribute("data-index"); 
+            listeElements.removeChild(listeElements.childNodes[index]); 
+            panier.splice(index, 1); 
+            prix.splice(index, 1);
+            updatePanier(); 
+
+            var immatriculation = panier[index];
+            var boutonSell = document.getElementById("sell_" + immatriculation);
+            if (boutonSell) {
+                boutonSell.innerText = "Sell";
+                boutonSell.disabled = false;
+            }
+        });
+
+        nouvelElementLi.appendChild(boutonSupprimer);
+        listeElements.appendChild(nouvelElementLi);
+    }
+}
 
     function payer() {
     var cni = document.getElementById("cni").value;
@@ -305,7 +332,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
     var date_debut = document.getElementById("date_debut").value;
     var duree = document.getElementById("duree").value;
 
-    // Vérifier si panier et prix sont définis et non vides
     if (panier && prix && panier.length > 0 && prix.length > 0) {
         var data = new URLSearchParams();
         data.append('cni', cni);
@@ -326,7 +352,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
         .then(response => response.text())
         .then(data => {
             console.log(data);
-            // Fermer la modal après l'insertion
             $('#panierModal').modal('hide');
         })
         .catch(error => {
@@ -335,35 +360,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
     } else {
         console.error('Panier ou prix non défini ou vide.');
     }
-}
-
-var listeElements = document.getElementById("listePanier");
-
-for (var i = 0; i < panier.length; i++) {
-    var nouvelElementLi = document.createElement("li");
-    nouvelElementLi.textContent = panier[i]+ "    -     "+ prix[i]+" €";
-    var boutonSupprimer = document.createElement("button");
-    boutonSupprimer.textContent = "Supprimer";
-    boutonSupprimer.setAttribute("data-index", i);
-
-    /// Evenement sur Bouton supprimer
-    boutonSupprimer.addEventListener("click", function(event) {
-        var index = event.target.getAttribute("data-index"); // Récupérer l'index de l'élément
-        listeElements.removeChild(listeElements.childNodes[index]); // Supprimer l'élément li du DOM
-        panier.splice(index, 1);
-        prix.splice(index, 1);
-
-        // on rend le bouton cliquable et sell
-        <?php for ($j = 0; $j < count($immat); $j++) : ?>
-        if (panier[index] == '<?php echo $immat[$j]; ?>') {
-            var bouton = document.getElementById("sell_<?php echo $immat[$j]; ?>");
-            bouton.innerText = "Sell";
-            bouton.disabled = false;
-        }
-    <?php endfor; ?>
-    });
-    nouvelElement.appendChild(boutonSupprimer);
-    listeElements.appendChild(nouvelElementLi);
 }
 
 
