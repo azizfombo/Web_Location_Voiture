@@ -262,6 +262,9 @@ if ($_SESSION['poste'] == 'CAISSE') {
                                 <input type="number" class="form-control" id="duree" name="duree">
                             </div>
                             <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
+
+                            <ul id="listePanier"></ul>
+
                         </form>
 
 
@@ -310,8 +313,8 @@ if ($_SESSION['poste'] == 'CAISSE') {
         data.append('telephone', telephone);
         data.append('date_debut', date_debut);
         data.append('duree', duree);
-        data.append('panier', JSON.stringify(panier)); // Convertir le tableau en chaîne JSON
-        data.append('prix', JSON.stringify(prix)); // Convertir le tableau en chaîne JSON
+        data.append('panier', JSON.stringify(panier));
+        data.append('prix', JSON.stringify(prix));
 
         fetch('../Traitement/insererClient.php', {
             method: 'POST',
@@ -334,6 +337,34 @@ if ($_SESSION['poste'] == 'CAISSE') {
     }
 }
 
+var listeElements = document.getElementById("listePanier");
+
+for (var i = 0; i < panier.length; i++) {
+    var nouvelElementLi = document.createElement("li");
+    nouvelElementLi.textContent = panier[i]+ "    -     "+ prix[i]+" €";
+    var boutonSupprimer = document.createElement("button");
+    boutonSupprimer.textContent = "Supprimer";
+    boutonSupprimer.setAttribute("data-index", i);
+
+    /// Evenement sur Bouton supprimer
+    boutonSupprimer.addEventListener("click", function(event) {
+        var index = event.target.getAttribute("data-index"); // Récupérer l'index de l'élément
+        listeElements.removeChild(listeElements.childNodes[index]); // Supprimer l'élément li du DOM
+        panier.splice(index, 1);
+        prix.splice(index, 1);
+
+        // on rend le bouton cliquable et sell
+        <?php for ($j = 0; $j < count($immat); $j++) : ?>
+        if (panier[index] == '<?php echo $immat[$j]; ?>') {
+            var bouton = document.getElementById("sell_<?php echo $immat[$j]; ?>");
+            bouton.innerText = "Sell";
+            bouton.disabled = false;
+        }
+    <?php endfor; ?>
+    });
+    nouvelElement.appendChild(boutonSupprimer);
+    listeElements.appendChild(nouvelElementLi);
+}
 
 
 </script>
