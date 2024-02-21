@@ -325,7 +325,7 @@ function updatePanier() {
             <?php for ($j = 0; $j < count($immat); $j++) : ?>
                 if (panier[index] == '<?php echo $immat[$j]; ?>') {
                 var bouton = document.getElementById("sell_<?php echo $immat[$j]; ?>");
-                bouton.innerText = "Sell";
+                bouton.innerText = "Rent";
                 bouton.classList.remove("disabled");
                 }
             <?php endfor; ?>
