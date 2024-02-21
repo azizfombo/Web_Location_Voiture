@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn = Database::connect();
+    echo $dispo;
+    echo $_POST['dispo'];
     $stmt = $conn->prepare("INSERT INTO vehicules (marque, immat, info , dispo, prixlocation, photos) VALUES (:marque, :immat,:info, :dispo, :prixlocation,:photos)");
     $stmt->bindParam(':marque', $marque);
     $stmt->bindParam(':immat', $immat);

@@ -193,8 +193,8 @@ if ($_SESSION['poste'] == 'CAISSE') {
     <div class="mb-3">
     <label for="dispo" class="form-label">Disponibilité</label>
     <select id="dispo" name="dispo" class="form-select">
-        <option value="CAISSE">OUI</option>
-        <option value="GERANT">NON</option>
+        <option value="OUI">OUI</option>
+        <option value="NON">NON</option>
     </select>
 </div>
 
