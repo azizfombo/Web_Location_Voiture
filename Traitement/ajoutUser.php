@@ -2,6 +2,7 @@
 require '../database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST['nom'], $_POST['email'], $_POST['telephone'], $_POST['poste'])){
     // Récupérer les données du formulaire
     $nom = $_POST['nom'];
     $email = $_POST['email'];
@@ -28,5 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../View/pageGerantUsers.php?error=1");
         exit();
     }
+}
 }
 ?>

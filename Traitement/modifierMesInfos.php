@@ -2,7 +2,8 @@
 session_start();
 require '../database.php';
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //recuperer les infos du formulaires 
+    //recuperer les infos du formulaires
+    if(isset($_POST['Nomuser'], $_POST['email'], $_POST['password'])){ 
     $Nomuser = $_POST['Nomuser'];
     $email = $_POST['email'];
     $telephone = $_POST['telephone'];
@@ -38,6 +39,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         header("Location: ../View/pageUsers.php?error=1");
         exit();
     }
-
+    }
 }
 ?>

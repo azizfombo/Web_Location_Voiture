@@ -87,7 +87,7 @@ if ($_SESSION['poste'] == 'CAISSE') {
                             <div class="row">
                                 <div class="col-4 mb-2 text-center">
                                     <?php if ($dispo[$i] == 'OUI') : ?>
-                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Sell</a>
+                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Rent</a>
                                     <?php else : ?>
                                         <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-secondary disabled d-flex align-items-center justify-content-center">Sold Out</a>
                                     <?php endif; ?>
@@ -133,7 +133,7 @@ if ($_SESSION['poste'] == 'CAISSE') {
                             <div class="row">
                                 <div class="col-12 mb-2 text-center">
                                     <?php if ($dispo[$i] == 'OUI') : ?>
-                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Sell</a>
+                                        <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-success d-flex align-items-center justify-content-center">Rent</a>
                                     <?php else : ?>
                                         <a href="#" id="sell_<?php echo $immat[$i]; ?>" class="btn btn-secondary disabled d-flex align-items-center justify-content-center">Sold Out</a>
                                     <?php endif; ?>

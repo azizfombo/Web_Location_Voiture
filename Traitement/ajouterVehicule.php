@@ -2,6 +2,7 @@
 require '../database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST['marque'], $_POST['immat'], $_POST['info'], $_POST['dispo'])){
     // Récupérer les données du formulaire
     $marque = $_POST['marque'];
     $immat = $_POST['immat'];
@@ -32,5 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../View/pageCaissiereVoiture.php?error=1");
         exit();
     }
+}
 }
 ?>
