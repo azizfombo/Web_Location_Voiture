@@ -35,9 +35,9 @@ try{
    
 ?>
 
-<div class="container mt-5">
-        <header>
-            <h1>Rent a Car</h1>
+<div class="container-fluid" style="background-image:url('images/voiture8.webp');background-repeat: no-repeat; background-size: cover; ">
+        <header class="fas fa-car fa-3x me-3 pt-5" style="color: #709085;">
+        <h1>Rent & Drive</h1>  
         </header>
 
         <?php 
@@ -49,12 +49,12 @@ try{
         
         ?>
         <section class="mt-4">
-            <h2>MON PROFIL</h2>
+        <h2 style="color: #709085; font-size: 30px; font-family: 'Courier New', Courier, monospace; text-shadow: 2px 2px #709085;">MON PROFIL</h2>
             <?php
         if (isset($_GET['success'])) {
-            echo '<div class="alert alert-success" role="alert">Utilisateur ajouté avec succès!</div>';
+            echo '<div class="alert alert-success" role="alert">Les données de l\'Utilisateur ont été modifiées avec succès!</div>';
         } elseif (isset($_GET['error'])) {
-            echo '<div class="alert alert-danger" role="alert">Une erreur s\'est produite lors de l\'ajout de l\'utilisateur.</div>';
+            echo '<div class="alert alert-danger" role="alert">Une erreur s\'est produite lors de la modification des informations de l\'utilisateur.</div>';
         }
         ?>
         </section>
@@ -62,7 +62,7 @@ try{
             <div class="col">
                 <div class="card" style="width: 18rem;">
                 <?php
-                echo'<img class="card-img-top" style="height: 250px; object-fit:cover;" src="data:image/jpeg;base64,'.base64_encode($_SESSION['photo']).'" alt="Card image cap">';
+                echo'<img class="card-img-top" style="height: 250px; object-fit:cover; border-radius: 20px;" src="data:image/jpeg;base64,'.base64_encode($_SESSION['photo']).'" alt="Card image cap">';
                 ?>
                     <div class="card-body">
                         <p class="card-text"><?php echo $_SESSION['Nomuser'] ?></p>
@@ -93,9 +93,12 @@ try{
                         <input type="file" class="form-control" id="photo" name="photo" accept="image/jpeg, image/png, image/gif">
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #709085; border-color: #709085; color: white;">Modifier</button>
                 </form>
             </div>
         </div>
-</div>        
+        <br>    
+</div>   
+<br>
+
 <?php require 'inc/footer.php';?>

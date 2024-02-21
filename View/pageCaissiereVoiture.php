@@ -1,3 +1,8 @@
+<div class="container-fluid" style="background-image:url('images/voiture8.webp');background-repeat: no-repeat; background-size: cover; ">
+
+        <header class="fas fa-car fa-3x me-3 pt-5" style="color: #709085;">
+        <h1>Rent & Drive</h1>  
+        </header>
 <?php
 require 'inc/header.php';
 require_once '../index.php';
@@ -46,15 +51,15 @@ if ($_SESSION['poste'] == 'CAISSE') {
     <div class="container">
         <div class="row d-flex justify-content-between">
             <div class="col-auto">
-                <h1>Liste des voitures</h1>
+            <h2 style="color: #709085; font-size: 30px; font-family: 'Courier New', Courier, monospace; text-shadow: 2px 2px #709085;">NOS VEHICULES</h2>
             </div>
             <div class="col-auto">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#panierModal">
+                    <i class="fas fa-shopping-cart fa-2x"></i>Panier
+                </button>
             </div>
         </div>
+        <br>
         <div class="row">
         <?php if ($_SESSION['poste'] == 'GERANT') : ?>
             <?php
@@ -88,7 +93,7 @@ if ($_SESSION['poste'] == 'CAISSE') {
                                     <?php endif; ?>
                                 </div>
                                 <div class="col-4 mb-2 text-center">
-                                    <a href="#" class="btn btn-danger d-flex align-items-center justify-content-center">Delete</a>
+                                    <a href="#" class="btn btn-danger d-flex align-items-center justify-content-center" onclick="confirmDelete(<?php echo $immat[$i] ?>)">Delete</a>
                                 </div>
                                 <div class="col-4 mb-2 text-center ">
                                     <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center">Update</a>
@@ -207,10 +212,26 @@ if ($_SESSION['poste'] == 'CAISSE') {
 
     </div>
         </div>
-        <!-- Bouton "Panier" -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#panierModal">
-            Panier
-        </button>
+        
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer ce vehicule ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
         <!-- Modal pour les informations du panier -->
         <div class="modal fade" id="panierModal" tabindex="-1" role="dialog" aria-labelledby="panierModalLabel" aria-hidden="true">
@@ -224,13 +245,35 @@ if ($_SESSION['poste'] == 'CAISSE') {
                     </div>
                     <div class="modal-body">
                         <!-- Formulaire pour les informations du client -->
-                        <form id="panierForm1">
-                            
+                        <form id="panierForm">
+                            <div class="form-group">
+                                <label for="cni">CNI</label>
+                                <input type="text" class="form-control" id="cni" name="cni" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nomclient">Nom du client</label>
+                                <input type="text" class="form-control" id="nomclient" name="nomclient" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telephone">Téléphone</label>
+                                <input type="text" class="form-control" id="telephone" name="telephone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="date_debut">Date de début</label>
+                                <input type="date" class="form-control" id="date_debut" name="date_debut" required min="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="date_fin">Duree</label>
+                                <input type="number" class="form-control" id="duree" name="duree" required>
+                            </div>
+                            <h3> Liste des véhicules dans le panier</h3>
+                            <ul id="listePanier"></ul>
+
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="payer()">Payer</button>
                     </div>
                 </div>
             </div>
@@ -238,34 +281,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
     </div>
 
 
-
-
-    <form id="panierForm">
-                            <div class="form-group">
-                                <label for="cni">CNI</label>
-                                <input type="text" class="form-control" id="cni" name="cni">
-                            </div>
-                            <div class="form-group">
-                                <label for="nomclient">Nom du client</label>
-                                <input type="text" class="form-control" id="nomclient" name="nomclient">
-                            </div>
-                            <div class="form-group">
-                                <label for="telephone">Téléphone</label>
-                                <input type="text" class="form-control" id="telephone" name="telephone">
-                            </div>
-                            <div class="form-group">
-                                <label for="date_debut">Date de début</label>
-                                <input type="date" class="form-control" id="date_debut" name="date_debut">
-                            </div>
-                            <div class="form-group">
-                                <label for="date_fin">Duree</label>
-                                <input type="number" class="form-control" id="duree" name="duree">
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="payer()">Payer</button>
-
-                            <ul id="listePanier"></ul>
-
-                        </form>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -307,17 +322,17 @@ function updatePanier() {
 
         boutonSupprimer.addEventListener("click", function (event) {
             var index = event.target.getAttribute("data-index"); 
+            <?php for ($j = 0; $j < count($immat); $j++) : ?>
+                if (panier[index] == '<?php echo $immat[$j]; ?>') {
+                var bouton = document.getElementById("sell_<?php echo $immat[$j]; ?>");
+                bouton.innerText = "Sell";
+                bouton.classList.remove("disabled");
+                }
+            <?php endfor; ?>
             listeElements.removeChild(listeElements.childNodes[index]); 
             panier.splice(index, 1); 
             prix.splice(index, 1);
             updatePanier(); 
-
-            var immatriculation = panier[index];
-            var boutonSell = document.getElementById("sell_" + immatriculation);
-            if (boutonSell) {
-                boutonSell.innerText = "Sell";
-                boutonSell.disabled = false;
-            }
         });
 
         nouvelElementLi.appendChild(boutonSupprimer);
@@ -363,6 +378,34 @@ function updatePanier() {
 }
 
 
+
+
+function confirmDelete(index) {
+        console.log(index);
+        var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        confirmationModal.show();
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "../Traitement/suppressionVehicule.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.location.reload();
+                    } else {
+                        alert("Une erreur s'est produite lors de la suppression de l'utilisateur.");
+                    }
+                }
+            };
+            xhr.send("index=" + index);
+        });
+    }
+
+
+
 </script>
 
 <?php require 'inc/footer.php'; ?>
+
+</div>

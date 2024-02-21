@@ -1,8 +1,10 @@
 <?php
 
 ?>
-            <footer>
-                
+            <footer style="background-color: #333; color: white; text-align: center; padding: 20px 0; position: relative; bottom: 0; width: 100%;">
+                <div>
+                &copy; 2024 Rent and Drive. Tous droits réservés.
+                </div>
             </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

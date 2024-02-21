@@ -1,3 +1,5 @@
+<div class="container-fluid" style="background-image:url('images/voiture8.webp');background-repeat: no-repeat; background-size: cover; ">
+
 <?php 
 require 'inc/header.php';
 require '../database.php';
@@ -28,15 +30,15 @@ try{
 ?>
 
 
-    <div class="container mt-5">
-        <header>
-            <h1>Rent a Car</h1>
+<div class="container">
+        <header class="fas fa-car fa-3x me-3 pt-5" style="color: #709085;">
+          <h1>Rent & Drive</h1>  
         </header>
 
         <?php require_once 'inc/navbarGerant.php';?>
 
         <section class="mt-4">
-            <h2>Utilisateurs</h2>
+        <h2 style="color: #709085; font-size: 30px; font-family: 'Courier New', Courier, monospace; text-shadow: 2px 2px #709085;">UTILISATEURS</h2>
         </section>
         
         <!-- Modal pour la suppression -->
@@ -85,10 +87,10 @@ try{
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Téléphone</th>
-                <th scope="col">Poste</th>
-                <th scope="col">Action</th>
+                <th scope="col" style="color:white;">Nom</th>
+                <th scope="col" style="color:white;" >Téléphone</th>
+                <th scope="col" style="color:white;">Poste</th>
+                <th scope="col" style="color:white;">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -96,11 +98,11 @@ try{
             for($i=0; $i<count($noms);$i++){
                 echo'
                 <tr>
-                    <th scope="row">'.$noms[$i].'</th>
-                    <td>'.$telephones[$i].'</td>
-                    <td>'.$postes[$i].'</td>
+                    <th scope="row" style="color:white;">'.$noms[$i].'</th>
+                    <td style="color:white;">'.$telephones[$i].'</td>
+                    <td style="color:white;">'.$postes[$i].'</td>
                     <td>
-                    <button type="button" class="btn btn-success" onclick="editUser('.$id[$i].')">
+                    <button type="button" style="color:white;" class="btn btn-success" onclick="editUser('.$id[$i].')">
                     <i class="fas fa-pencil-alt"></i>
                 </button>                
                         <button type="button" class=" btn btn-danger" aria-label="Close" onclick="confirmDelete('.$id[$i].')">
@@ -217,3 +219,5 @@ try{
 
 
 <?php require 'inc/footer.php' ?>
+  
+      </div>

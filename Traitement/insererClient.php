@@ -18,7 +18,7 @@ try {
 
         $conn = Database::connect();
 
-        $stmt = $conn->prepare("INSERT INTO clients (cniclient, nomclient, telclient, typelocation, datedebut, duree, datefin) VALUES (?, ?, ?, ?, ?, ?,?)");
+        $stmt = $conn->prepare("INSERT INTO clients (cniclient, nomclient, telclient, typelocation, datedebut, duree, datefin) VALUES (?, ?, ?, ?, ?, ?,DATE_ADD(?, INTERVAL ? DAY))");
 
         $typelocation = ($duree > 10) ? 'LLD' : 'LCD';
 
@@ -29,6 +29,7 @@ try {
         $stmt->bindParam(5, $date_debut);
         $stmt->bindParam(6, $duree);
         $stmt->bindParam(7, $date_debut);
+        $stmt->bindParam(8, $duree);
         //$stmt->bindParam(8, $duree);
         $stmt->execute();
 
@@ -62,6 +63,7 @@ try {
         }
 
         echo "Clients ajoutés avec succès.";
+        header("Location: ../View/pageCaissiereVoiture.php");
     } else {
         echo "Toutes les données nécessaires n'ont pas été envoyées.";
     }
@@ -78,7 +80,7 @@ try {
 
     // Ajouter une page
     $pdf->AddPage();
-
+    $prixtotal =0;
     // Ajouter le contenu du PDF
     $content = '<h1>Facture de location de voiture</h1>';
     $content .= '<p><strong>Informations du client :</strong></p>';
@@ -87,11 +89,16 @@ try {
     $content .= '<p>Téléphone : ' . $telephone . '</p>';
     $content .= '<p>Date de début : ' . $date_debut . '</p>';
     $content .= '<p>Durée : ' . $duree . ' jours</p>';
+    $dateDebutObj = new DateTime($datedebut);  
+    $dateDebutObj->add(new DateInterval('P' . $duree . 'D')); 
+    $datefin = $dateDebutObj->format('Y-m-d');
+    $content .= '<p>Date de remise : ' . $datefin . ' jours</p>';
     $content .= '<p><strong>Éléments du panier :</strong></p>';
     for($i=0;$i<count($panier);$i++) {
-        $content .= '<p>Voiture : ' . $panier[$i] . '   -   '.$prix[$i].' €</p>';
+        $prixtotal = $prixtotal + $duree*$prix[$i];
+        $content .= '<p>Voiture : ' . $panier[$i] . '           -          '.$prix[$i].' €/J</p>';
     }
-
+    $content .= '<p>Prix Total : '.$prixtotal.' €</p>';
     $pdf->writeHTML($content, true, false, true, false, '');
 
     $file_name = 'facture_location_' . date('YmdHis') . '.pdf';

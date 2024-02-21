@@ -1,3 +1,8 @@
+<div class="container-fluid" style="background-image:url('images/voiture8.webp');background-repeat: no-repeat; background-size: cover; ">
+
+<header class="fas fa-car fa-3x me-3 pt-5" style="color: #709085;">
+        <h1>Rent & Drive</h1>  
+        </header>
 <?php 
 require_once '../index.php';
 verifierDroitsAcces('pageCaissiereVoiture.php');
@@ -51,7 +56,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
       <th scope="col">CNI</th>
       <th scope="col">Nom</th>
       <th scope="col">Téléphone</th>
-      <th scope="col">E-mail</th>
       <th scope="col">Type_Location</th>
       <th scope="col">Date_Debut</th>
       <th scope="col">Duree</th>
@@ -65,16 +69,15 @@ if ($_SESSION['poste'] == 'CAISSE') {
     for ($i = 0; $i < count($cniclient); $i++) {
   ?>
     <tr>
-      <th scope="row"><?php echo $cniclient[$i] ?></th>
-      <td><?php echo $nomclient[$i] ?></td>
-      <td><?php echo $telclient[$i] ?></td>
-      <td>emmanuel@3il.fr</td>
-      <td><?php echo $typelocation[$i] ?></td>
-      <td><?php echo $datedebut[$i] ?></td>
-      <td><?php echo $duree[$i] ?></td>
-      <td><?php echo $datefin[$i] ?></td>
+      <th scope="row" style="color:white;"><?php echo $cniclient[$i] ?></th>
+      <td style="color:white;"><?php echo $nomclient[$i] ?></td>
+      <td style="color:white;"><?php echo $telclient[$i] ?></td>
+      <td style="color:white;"><?php echo $typelocation[$i] ?></td>
+      <td style="color:white;"><?php echo $datedebut[$i] ?></td>
+      <td style="color:white;"><?php echo $duree[$i] ?></td>
+      <td style="color:white;"><?php echo $datefin[$i] ?></td>
       <td>
-      <button type="button" class=" btn btn-danger" aria-label="Close" onclick="confirmDelete('.$cniclient[$i].')">
+      <button type="button" class=" btn btn-danger" aria-label="Close" onclick="confirmDelete(<?php echo $cniclient[$i] ?>)">
         <i class="fas fa-trash-alt"></i>
       </button>
       </td>
@@ -87,5 +90,46 @@ if ($_SESSION['poste'] == 'CAISSE') {
 </div>
 
 </div>
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer ce clients ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-danger" id="confirmDelete">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function confirmDelete(index) {
+        console.log(index);
+        var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        confirmationModal.show();
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "../Traitement/suppressionClient.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.location.reload();
+                    } else {
+                        alert("Une erreur s'est produite lors de la suppression du client.");
+                    }
+                }
+            };
+            xhr.send("index=" + index);
+        });
+    }
+</script>
 
 <?php require 'inc/footer.php' ?>
+</div>
