@@ -46,7 +46,6 @@ try{
             }else if($_SESSION['poste']=='GERANT'){
                 require_once 'inc/navbarGerant.php';
             }
-        
         ?>
         <section class="mt-4">
         <h2 style="color: #709085; font-size: 30px; font-family: 'Courier New', Courier, monospace; text-shadow: 2px 2px #709085;">MON PROFIL</h2>

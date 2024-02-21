@@ -117,8 +117,8 @@
                         </div>
                     </div>
                 </form>
-                <h1 id="nombreDynamique" class="display-4">0</h1>
-                <button onclick="submitFormAndAnimate();">Rechercher</button>
+                <h1 id="nombreDynamique" class="display-4" style = "color:white;">0</h1>
+                <button class="btn my-2 my-sm-0" type="submit" style="background-color: #709085; border-color: #709085; color: white;" onclick="submitFormAndAnimate();">Rechercher</button>
             </div>
         </div>
         

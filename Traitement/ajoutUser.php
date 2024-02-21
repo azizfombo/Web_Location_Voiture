@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $telephone = $_POST['telephone'];
     $poste = $_POST['poste'];
-    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+    //$password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 
     $photo = file_get_contents($_FILES['photo']['tmp_name']);
 

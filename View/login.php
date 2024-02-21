@@ -8,12 +8,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     try{
         $connection = Database::connect();
-        $stmt = $connection->prepare('SELECT * FROM user WHERE email = :email');
+        $stmt = $connection->prepare('SELECT * FROM user WHERE email = :email and password=:password');
         $stmt->bindParam(':email',$email);
+        $stmt->bindParam(':password',$password);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-          if (password_verify($password, $result['password'])) {
+          //if (password_verify($password, $result['password'])) {
               $_SESSION['iduser']=$result['iduser'];
               $_SESSION['Nomuser']=$result['Nomuser'];
               $_SESSION['email']=$result['email'];
@@ -28,9 +29,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 header("Location: pageUsers.php");
                 exit();
               }
-          }else {
-            echo '<div class="alert alert-danger" role="alert">Mot de passe incorrect. Veuillez réessayer.</div>';
-        }
+          ///}else {
+           // echo '<div class="alert alert-danger" role="alert">Mot de passe incorrect. Veuillez réessayer.</div>';
+        //}
       } else {
         echo '<div class="alert alert-danger" role="alert">Identifiants incorrects. Veuillez réessayer.</div>';
       }
