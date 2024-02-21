@@ -73,7 +73,7 @@ try {
 
     // Ensemble des informations du document
     $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('Votre nom');
+    $pdf->SetAuthor('AZ');
     $pdf->SetTitle('Facture de location de voiture');
     $pdf->SetSubject('Facture de location de voiture');
     $pdf->SetKeywords('Facture, location, voiture');

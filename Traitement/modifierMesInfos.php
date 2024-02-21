@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Nomuser = $_POST['Nomuser'];
     $email = $_POST['email'];
     $telephone = $_POST['telephone'];
-    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+    $password = $_POST['password'];
 
     $conn = Database::connect();
     if(isset($_FILES['photo']['tmp_name']) && !empty($_FILES['photo']['tmp_name'])) {
