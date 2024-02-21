@@ -131,5 +131,6 @@ if ($_SESSION['poste'] == 'CAISSE') {
     }
 </script>
 
-<?php require 'inc/footer.php' ?>
+
 </div>
+<?php require 'inc/footer.php' ?>
